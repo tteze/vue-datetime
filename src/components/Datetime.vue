@@ -1,57 +1,35 @@
 <template>
     <div class="datetime-container">
-        <input :title="title" type="text" @focus="open = true" />
+        <input :title="title" type="text" @focus="open = true" :value="current.format('DD/MM/Y')" />
+
         <div v-if="open" class="datetime-picker">
-            {{ current.format('MMMM Y') }}
-            <br>
-            <br>
-            <table>
-                <tr v-for="(week, key) in daysInMonths" :key="key">
-                    <td v-for="day in week" :key="day.toString()" @click="current = day.clone()">
-                        {{ day.format('DD') }}
-                    </td>
-                </tr>
-            </table>
+            <DayPicker v-if="window === 'daypicker'" v-model="current" @window="window = $event" @input="open = false" />
+            <MonthPicker v-if="window === 'monthpicker'" v-model="current" @window="window = $event" />
         </div>
     </div>
 </template>
 
 <script>
 import moment from 'moment'
+import DayPicker from './DayPicker'
+import MonthPicker from './MonthPicker'
+
+moment.locale('fr')
 
 export default {
     name: 'Datetime',
+    components: { MonthPicker, DayPicker },
     data: function () {
         return {
             open: false,
-            current: moment(this.value)
+            current: moment(this.value),
+            window: 'daypicker'
         }
     },
     props: {
         value: String,
         title: String
-    },
-    computed: {
-        daysInMonths: function () {
-            let days = []
-            let begin = this.startOfMonth.clone().startOf('week')
-            let end = this.endOfMonth.clone().endOf('week')
-            for (let i = begin.clone(); i < end; i = i.add(1, 'w')) {
-                let week = []
-                for (let j = i.clone(); j < end && j < i.clone().endOf('week'); j = j.add(1, 'd')) {
-                    week.push(j.clone())
-                }
-                days.push(week)
-            }
-            return days
-        },
-        startOfMonth: function () {
-            return this.current.clone().startOf('month')
-        },
-        endOfMonth: function () {
-            return this.current.clone().endOf('month')
-        }
-    },
+    }
 }
 </script>
 
@@ -60,6 +38,7 @@ export default {
         position: relative;
         width: 200px;
         display: inline-block;
+
         .datetime-picker {
             margin-top: 5px;
             margin-left: 10px;
