@@ -1,10 +1,11 @@
 <template>
-    <div class="datetime-container">
-        <input :title="title" type="text" @focus="open = true" :value="current.format('DD/MM/Y')" />
+    <div class="datetime-container" ref="container">
+        <input :title="title" type="text" @focus="open" :value="current.format('DD/MM/Y')" />
 
-        <div v-if="open" class="datetime-picker">
-            <DayPicker v-if="window === 'daypicker'" v-model="current" @window="window = $event" @input="open = false" />
+        <div v-if="opened" class="datetime-picker">
+            <DayPicker v-if="window === 'daypicker'" v-model="current" @window="window = $event" @input="opened = false" />
             <MonthPicker v-if="window === 'monthpicker'" v-model="current" @window="window = $event" />
+            <YearPicker v-if="window === 'yearpicker'" v-model="current" @window="window = $event" />
         </div>
     </div>
 </template>
@@ -13,22 +14,53 @@
 import moment from 'moment'
 import DayPicker from './DayPicker'
 import MonthPicker from './MonthPicker'
+import YearPicker from './YearPicker'
 
 moment.locale('fr')
 
 export default {
     name: 'Datetime',
-    components: { MonthPicker, DayPicker },
+
+    components: { YearPicker, MonthPicker, DayPicker },
+
     data: function () {
         return {
-            open: false,
+            opened: false,
             current: moment(this.value),
             window: 'daypicker'
         }
     },
+
     props: {
         value: String,
         title: String
+    },
+
+    methods: {
+        clickOut: function (event) {
+            if (event.target !== null && event.target.closest('.datetime-container') !== this.$refs.container) {
+                this.opened = false
+            }
+        },
+
+        open: function () {
+            this.opened = true
+            this.window = 'daypicker'
+        }
+    },
+
+    /**
+     * Met en place un écouteur pour écouter un click out
+     */
+    mounted: function () {
+        document.body.addEventListener('click', this.clickOut)
+    },
+
+    /**
+     * Supprime l'écouteur avant de détruire l'objet
+     */
+    beforeDestroy: function () {
+        document.body.removeEventListener('click', this.clickOut)
     }
 }
 </script>

@@ -3,8 +3,8 @@
         <div @click="$emit('window', 'monthpicker')">{{ position.format('MMMM Y') }}</div>
 
         <div>
-            <button @click="$emit('input', position.clone().add(1, 'M'))">Précédent</button>
-            <button @click="$emit('input', position.clone().subtract(1, 'M'))">Suivant</button>
+            <button @click="position = position.clone().subtract(1, 'M')">Précédent</button>
+            <button @click="position = position.clone().add(1, 'M')">Suivant</button>
         </div>
 
         <br><br>
@@ -23,6 +23,7 @@
 <script>
 export default {
     name: 'DayPicker',
+
     props: {
         value: Object
     },
@@ -34,7 +35,7 @@ export default {
     },
 
     watch: {
-        value: function (newValue) {
+        value: function () {
             this.position = this.value.clone()
         }
     },

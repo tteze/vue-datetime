@@ -1,6 +1,6 @@
 <template>
     <div class="monthpicker">
-        <div>{{ value.format('Y') }}</div>
+        <div @click="$emit('window', 'yearpicker')">{{ value.format('Y') }}</div>
 
         <table>
             <tr v-for="(line, key) in monthsInYear" :key="key">
@@ -15,9 +15,11 @@
 <script>
 export default {
     name: 'MonthPicker',
+
     props: {
         value: Object
     },
+
     computed: {
         monthsInYear: function () {
             let months = []
