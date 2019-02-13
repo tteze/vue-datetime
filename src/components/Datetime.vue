@@ -53,14 +53,14 @@ export default {
      * Met en place un écouteur pour écouter un click out
      */
     mounted: function () {
-        document.body.addEventListener('click', this.clickOut)
+        document.addEventListener('click', this.clickOut)
     },
 
     /**
      * Supprime l'écouteur avant de détruire l'objet
      */
     beforeDestroy: function () {
-        document.body.removeEventListener('click', this.clickOut)
+        document.removeEventListener('click', this.clickOut)
     }
 }
 </script>
