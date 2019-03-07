@@ -1,68 +1,108 @@
 <template>
-    <div class="datetime-container" ref="container">
-        <input :title="title" type="text" @focus="open" :value="current.format('DD/MM/Y')" />
+    <div
+        ref="container"
+        class="datetime-container"
+    >
+        <input
+            :title="title"
+            type="text"
+            :value="current.format('DD/MM/Y HH:mm:ss')"
+            readonly
+            @focus="open"
+        >
 
-        <div v-if="opened" class="datetime-picker">
-            <DayPicker v-if="window === 'daypicker'" v-model="current" @window="window = $event" @input="opened = false" />
-            <MonthPicker v-if="window === 'monthpicker'" v-model="current" @window="window = $event" />
-            <YearPicker v-if="window === 'yearpicker'" v-model="current" @window="window = $event" />
+        <div
+            v-if="opened"
+            class="datetime-picker"
+        >
+            <TimePicker
+                v-if="window === 'timepicker'"
+                v-model="current"
+                @window="window = $event"
+                @close="opened = false"
+            />
+
+            <DayPicker
+                v-if="window === 'daypicker'"
+                v-model="current"
+                @window="window = $event"
+            />
+
+            <MonthPicker
+                v-if="window === 'monthpicker'"
+                v-model="current"
+                @window="window = $event"
+            />
+
+            <YearPicker
+                v-if="window === 'yearpicker'"
+                v-model="current"
+                @window="window = $event"
+            />
         </div>
     </div>
 </template>
 
 <script>
-import moment from 'moment'
-import DayPicker from './DayPicker'
-import MonthPicker from './MonthPicker'
-import YearPicker from './YearPicker'
+    import moment from 'moment'
+    import DayPicker from './DayPicker'
+    import MonthPicker from './MonthPicker'
+    import YearPicker from './YearPicker'
+    import TimePicker from './TimePicker'
 
-moment.locale('fr')
+    moment.locale('fr')
 
-export default {
-    name: 'Datetime',
+    export default {
+        name: 'Datetime',
 
-    components: { YearPicker, MonthPicker, DayPicker },
+        components: { TimePicker, YearPicker, MonthPicker, DayPicker },
 
-    data: function () {
-        return {
-            opened: false,
-            current: moment(this.value),
-            window: 'daypicker'
-        }
-    },
+        props: {
+            value: {type: Object, required: true},
+            title: {type: String, default: null},
+        },
 
-    props: {
-        value: String,
-        title: String
-    },
-
-    methods: {
-        clickOut: function (event) {
-            if (event.target !== null && event.target.closest('.datetime-container') !== this.$refs.container) {
-                this.opened = false
+        data: function () {
+            return {
+                opened: false,
+                current: moment(this.value),
+                window: 'daypicker'
             }
         },
 
-        open: function () {
-            this.opened = true
-            this.window = 'daypicker'
+        /**
+         * Listen for clickOut
+         */
+        mounted: function () {
+            document.addEventListener('click', this.clickOut)
+        },
+
+        /**
+         * Remove listener before destroy
+         */
+        beforeDestroy: function () {
+            document.removeEventListener('click', this.clickOut)
+        },
+
+        methods: {
+            /**
+             * Close the picker when clickOut
+             */
+            clickOut: function (event) {
+                if (event.target !== null && event.target.closest('.datetime-container') !== this.$refs.container) {
+                    this.opened = false
+                }
+            },
+
+            /**
+             * Open the picker
+             */
+            open: function () {
+                this.opened = true
+                this.window = 'daypicker'
+            }
         }
-    },
-
-    /**
-     * Met en place un écouteur pour écouter un click out
-     */
-    mounted: function () {
-        document.addEventListener('click', this.clickOut)
-    },
-
-    /**
-     * Supprime l'écouteur avant de détruire l'objet
-     */
-    beforeDestroy: function () {
-        document.removeEventListener('click', this.clickOut)
     }
-}
 </script>
 
 <style lang="scss" scoped>

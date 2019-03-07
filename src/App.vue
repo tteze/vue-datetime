@@ -5,14 +5,14 @@
 </template>
 
 <script>
-import Datetime from './components/Datetime'
+    import Datetime from './components/Datetime'
 
-export default {
-    name: 'app',
-    components: {
-        Datetime
+    export default {
+        name: 'App',
+        components: {
+            Datetime
+        }
     }
-}
 </script>
 
 <style lang="scss">

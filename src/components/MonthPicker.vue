@@ -1,10 +1,19 @@
 <template>
     <div class="monthpicker">
-        <div @click="$emit('window', 'yearpicker')">{{ value.format('Y') }}</div>
+        <div @click="$emit('window', 'yearpicker')">
+            {{ value.format('Y') }}
+        </div>
 
         <table>
-            <tr v-for="(line, key) in monthsInYear" :key="key">
-                <td v-for="month in line" :key="month.toString()" @click="pick(month)">
+            <tr
+                v-for="(line, key) in monthsInYear"
+                :key="key"
+            >
+                <td
+                    v-for="month in line"
+                    :key="month.toString()"
+                    @click="pick(month)"
+                >
                     {{ month.format('MMM') }}
                 </td>
             </tr>
@@ -13,38 +22,46 @@
 </template>
 
 <script>
-export default {
-    name: 'MonthPicker',
+    export default {
+        name: 'MonthPicker',
 
-    props: {
-        value: Object
-    },
+        props: {
+            value: {type: Object, required: true}
+        },
 
-    computed: {
-        monthsInYear: function () {
-            let months = []
-            let month = this.value.clone().startOf('year')
-            for (let i = 0; i < 12;) {
-                let line = []
+        computed: {
+            /**
+             * Get all months in Year
+             * @return Array
+             */
+            monthsInYear: function () {
+                let months = []
+                let month = this.value.clone().startOf('year')
+                for (let i = 0; i < 12;) {
+                    let line = []
 
-                for (let j = 0; j < 4; j++, i++, month.add(1, 'M')) {
-                    line.push(month.clone())
+                    for (let j = 0; j < 4; j++, i++, month.add(1, 'M')) {
+                        line.push(month.clone())
+                    }
+
+                    months.push(line)
                 }
 
-                months.push(line)
+                return months
             }
+        },
 
-            return months
-        }
-    },
-
-    methods: {
-        pick: function (month) {
-            this.$emit('input', this.value.clone().month(month.month()))
-            this.$emit('window', 'daypicker')
+        methods: {
+            /**
+             * Pick a month
+             * @param month Object
+             */
+            pick: function (month) {
+                this.$emit('input', this.value.clone().month(month.month()))
+                this.$emit('window', 'daypicker')
+            }
         }
     }
-}
 </script>
 
 <style scoped>
