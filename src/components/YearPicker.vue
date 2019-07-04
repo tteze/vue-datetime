@@ -1,15 +1,22 @@
 <template>
     <div class="yearpicker">
         <div>
-            <button @click="position = position.clone().subtract(9, 'Y')">
+            <button
+                class="datetime-back"
+                @click="position = position.clone().subtract(9, 'Y')"
+            >
                 Précédent
             </button>
-            <button @click="position = position.clone().add(9, 'Y')">
+
+            <button
+                class="datetime-next"
+                @click="position = position.clone().add(9, 'Y')"
+            >
                 Suivant
             </button>
         </div>
 
-        <table>
+        <table class="datetime-pick-container">
             <tr
                 v-for="(line, key) in years"
                 :key="key"
@@ -17,6 +24,7 @@
                 <td
                     v-for="year in line"
                     :key="year.toString()"
+                    class="datetime-to-pick"
                     @click="pick(year)"
                 >
                     {{ year.format('YYYY') }}

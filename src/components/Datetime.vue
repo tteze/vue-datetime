@@ -113,10 +113,39 @@
 
         .datetime-picker {
             margin-top: 5px;
-            margin-left: 10px;
+            margin-left: 0;
+            padding: 5px;
             position: absolute;
             width: 100%;
             border: 1px solid #ddd;
         }
+    }
+</style>
+
+<style lang="scss">
+    .datetime-to-pick, .datetime-current {
+        cursor: pointer;
+        transition: all .1s;
+
+        &:hover {
+            transform: scale(1.1);
+        }
+    }
+
+    .datetime-next, .datetime-back {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        margin: 5px;
+        cursor: pointer;
+        border-radius: 5px;
+        padding: 5px 10px;
+
+        &:hover {
+            background-color: #eee;
+        }
+    }
+
+    .datetime-pick-container {
+        margin: 0 auto;
     }
 </style>

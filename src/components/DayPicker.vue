@@ -1,22 +1,29 @@
 <template>
     <div class="daypicker">
-        <div @click="$emit('window', 'monthpicker')">
+        <div
+            class="datetime-current"
+            @click="$emit('window', 'monthpicker')"
+        >
             {{ position.format('MMMM Y') }}
         </div>
 
         <div>
-            <button @click="position = position.clone().subtract(1, 'M')">
+            <button
+                class="datetime-back"
+                @click="position = position.clone().subtract(1, 'M')"
+            >
                 Précédent
             </button>
 
-            <button @click="position = position.clone().add(1, 'M')">
+            <button
+                class="datetime-next"
+                @click="position = position.clone().add(1, 'M')"
+            >
                 Suivant
             </button>
         </div>
 
-        <br><br>
-
-        <table>
+        <table class="datetime-pick-container">
             <tr
                 v-for="(week, key) in daysInMonths"
                 :key="key"
@@ -24,6 +31,7 @@
                 <td
                     v-for="day in week"
                     :key="day.toString()"
+                    class="datetime-to-pick"
                     :class="{ out: day < startOfMonth || day > endOfMonth }"
                     @click="pick(day)"
                 >
@@ -122,7 +130,7 @@
     }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     .out {
         color: #bbb;
     }

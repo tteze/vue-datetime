@@ -1,10 +1,13 @@
 <template>
     <div class="monthpicker">
-        <div @click="$emit('window', 'yearpicker')">
+        <div
+            class="datetime-current"
+            @click="$emit('window', 'yearpicker')"
+        >
             {{ value.format('Y') }}
         </div>
 
-        <table>
+        <table class="datetime-pick-container">
             <tr
                 v-for="(line, key) in monthsInYear"
                 :key="key"
@@ -12,6 +15,7 @@
                 <td
                     v-for="month in line"
                     :key="month.toString()"
+                    class="datetime-to-pick"
                     @click="pick(month)"
                 >
                     {{ month.format('MMM') }}
