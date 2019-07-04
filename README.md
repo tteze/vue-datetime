@@ -1,4 +1,6 @@
 # datetime
+This is a simple vue js datetime picker code that you can fork or copy
+ to use it in your own personnal code.
 
 ## Project setup
 ```
